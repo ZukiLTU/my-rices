@@ -1,38 +1,121 @@
-# ~/.config/starship.toml
+# Inserts a blank line between shell prompts
+add_newline = true
 
-format = '''
-[┌───────>](white)$battery(white)$cmd_duration
-[│](white)$directory$rust$package
-[└─>](white) '''
+# Use custom format
+format = """
+[┌─╸](bold fg:#4c566a)\\[$username$hostname$battery\\] [╾─╸](bold fg:#4c566a) \\[$cmd_duration\\]
+[├─╸](dimmed #ebdbb2)[\\[](bold pink)$directory[\\]](bold pink) $git_branch $git_commit $git_state $git_status
+[└─╸](dimmed #ebdbb2)$character
+"""
 
-[battery]
-full_symbol = "🔋"
-charging_symbol = "🔌"
-discharging_symbol = "⚡"
-
-[[battery.display]]
-threshold = 30
-style = "bold red"
+# Wait 10 milliseconds for starship to check files under the current directory.
+scan_timeout = 10
 
 [character]
-error_symbol = "[✖](bold red) "
+success_symbol = "[$USER](yellow)$battery(white)[⌦](bold green) "
+error_symbol = "[✗](bold red) "
 
-[cmd_duration]
-min_time = 10_000  # Show command duration over 10,000 milliseconds (=10 sec)
-format = " took [$duration]($style)"
+# Disable the package module, hiding it from the prompt completely
+[package]
+disabled = false
+
+[battery]
+full_symbol = "🔋 "
+charging_symbol = "⚡️ "
+discharging_symbol = "💀 "
+disabled = false
+format = " ~ ⚡[$percentage](bold pink)"
+
+[[battery.display]]  # "bold red" style and discharging_symbol when capacity is between 0% and 10%
+threshold = 100
+style = "bold pink"
+
+[crystal]
+format = "via [✨ $version](bold blue) "
+
+[dart]
+format = "via [🔰 $version](bold red) "
+
+[deno]
+format = "via [🦕 $version](green bold) "
+
+[docker_context]
+format = "via [🐋 $context](blue bold)"
+
+[elixir]
+symbol = "🔮 "
+
+[dotnet]
+symbol = "🥅 "
+style = "green"
+heuristic = false
+
+[java]
+symbol = "🌟 "
+
+[kotlin]
+symbol = "🅺 "
+
+[lua]
+format = "via [🌕 $version](bold blue) "
+
+[nim]
+style = "yellow"
+symbol = "🎣 "
+
+[nodejs]
+format = "via [🤖 $version](bold green) "
+
+[ocaml]
+format = "via [🐪 $version]($style) "
+
+[pulumi]
+format = "[🛥 ($version )$stack]($style) "
+
+[rlang]
+format = "with [📐 $version](blue bold) "
+
+[red]
+symbol = "🔴 "
+
+[scala]
+symbol = "🌟 "
+
+[rust]
+format = "via [⚙️ $version](red bold)"
+
+[ruby]
+symbol = "🔺 "
+
+[shell]
+fish_indicator = ""
+powershell_indicator = "_"
+unknown_indicator = "mystery shell"
+style = "cyan bold"
+disabled = false
+
+[perl]
+format = "via [🦪 $version]($style) "
+
+[php]
+format = "via [🔹 $version](147 bold) "
+
+[kubernetes]
+format = 'on [⛵ $context \($namespace\)](dimmed green) '
+disabled = false
+
+[git_commit]
+commit_hash_length = 4
+tag_symbol = "🔖 "
 
 [directory]
-truncation_length = 5
-format = "[$path]($style)[$lock_symbol]($lock_style) "
+truncation_length = 8
+truncation_symbol = "…/"
 
 [git_branch]
 format = " [$symbol$branch]($style) "
 symbol = "🍣 "
 style = "bold yellow"
-
-[git_commit]
-commit_hash_length = 8
-style = "bold white"
 
 [git_state]
 format = '[\($state( $progress_current of $progress_total)\)]($style) '
@@ -53,15 +136,9 @@ format = "$all_status$ahead_behind"
 
 [hostname]
 ssh_only = false
-format = "<[$hostname]($style)>"
-trim_at = "-"
-style = "bold dimmed white"
-disabled = true
-
-[julia]
-format = "[$symbol$version]($style) "
-symbol = "ஃ "
-style = "bold green"
+format = "[$hostname]($style)"
+style = "bold cyan"
+disabled = false
 
 [memory_usage]
 format = "$symbol[${ram}( | ${swap})]($style) "
@@ -69,26 +146,25 @@ threshold = 70
 style = "bold dimmed white"
 disabled = false
 
-[package]
-disabled = true
-
-[python]
-format = "[$symbol$version]($style) "
-style = "bold green"
-
-[rust]
-format = "[$symbol$version]($style) "
-style = "bold green"
-
 [time]
-time_format = "%T"
-format = "🕙 $time($style) "
+# time_format = "%T"
+# use_12hr = true
+format = "$time($style) "
 style = "bright-white"
 disabled = false
 
-[username]
-style_user = "bold dimmed blue"
-show_always = false
+[cmd_duration]
+min_time = 100
+format = "⌛[$duration](bold yellow) elapsed"
 
-[nodejs]
-format = "via [🤖 $version](bold green) "
+[username]
+format = "[$user]($style)@"
+style_root = "black bold"
+style_user = "bold purple"
+show_always = true
+
+#[memory_usage]
+#disabled = false
+#threshold = -1
+#symbol = " "
+#style = "bold dimmed green"
